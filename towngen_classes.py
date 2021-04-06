@@ -28,8 +28,10 @@ FEMALE_NAMES = populate_name_list('./names/female/namelist.txt')
 MALE_NAMES   = populate_name_list('./names/male/namelist.txt')
 LAST_NAMES   = populate_name_list('./names/last/namelist.txt')
 
+
+
 class Settlement(object):
-    def __init__(self, n_of_people=100):
+    def __init__(self, n_of_people=20):
         self.population = []
         self.jobs = None
         self.generate_population(n_of_people)
@@ -37,16 +39,32 @@ class Settlement(object):
         self.print_population_names()
         #this is a list of jobs in town
     
+    #Getters
     def get_population(self):
         return self.population
     def print_population_names(self):
-        list_len = len(self.population)
-        for i in range(list_len):
+       #list_len = len(self.population)
+        for i in range(len(self.population)):
             print (self.population[i].get_full_name())
-            
-    
+    def get_index_full_name(self, target_full_name):
+        print(next((i for i, person in enumerate(self.population) if person.full_name == target_full_name), None))
+    # def sort_population(self, attribute_type):
+    #     for i in range(len(self.population)):
+    #         self.population[i].        
+    def print_person_data(self):
+        for i, x in enumerate(self.population):
+            print(f'Index = {i}')
+            print(f'Full Name:{x.full_name},')
+            print(f'Age: {x.age}')
+            print(f'Gender/Orientation: {x.gender}, {x.orientation}')
+            print(f'Partner: {x.partner.full_name}')
+            print('__________________________________')
+    #Setters
     def set_population(self, list_of_people):
         self.population = list_of_people
+    
+        
+    #Generators
     def generate_population(self, n=5):
         #takes in n number of people you want to generate
         new_population = []
@@ -81,6 +99,9 @@ class Settlement(object):
                 print(i)
                 print("orientation error")
         while len(temp_bi) != 0:
+        #     r = random.randint(1,10)
+        #     if r > 3:
+        #         partner_index = random.randrange(1,)
             r = random.randint(1,10)
             if r > 3:
                 partner_i = random.randrange(1,(len(temp_straight)))  
@@ -134,6 +155,7 @@ class Person(object):
         self.gender = None
         self.first_name = None
         self.last_name = None
+        self.full_name = None
         self.alive = None
         #Define social characteristics
         self.orientation = None
@@ -144,6 +166,7 @@ class Person(object):
         self.set_random_age()
         self.set_random_gender()
         self.set_random_name()
+        self.set_full_name()
         self.set_random_orientation()
     
     #Getters
@@ -156,6 +179,7 @@ class Person(object):
     def get_last_name(self):
         return self.last_name
     def get_full_name(self):
+        self.set_full_name()
         return f'{self.first_name} {self.last_name}'
     def get_alive(self):
         return self.alive
@@ -190,6 +214,8 @@ class Person(object):
         self.partner = partner_name
     def set_children(self, child_name):
         self.children.append(child_name)
+    def set_full_name(self):
+        self.full_name = self.first_name + ' ' + self.last_name
     
     #methods
     def set_random_age(self):
@@ -211,6 +237,7 @@ class Person(object):
         # print (newname[1])
         self.set_first_name(newname[0])
         self.set_last_name(newname[1])
+        self.set_full_name()
     def set_random_orientation(self):
         x = random.randint(0,100)
         # 0 is null, 1 is gay, 2 is straight, 3 is bi
@@ -236,8 +263,8 @@ class Person(object):
             print('gender invalid.')
         return [first_name, random.choice(LAST_NAMES)]
         
-    def __str__(self):
-       return f'{self.name} is {self.age} years old. They identify as {self.gender}, and are {self.orientation}'   
+    #def __str__(self):
+    #   return f'{self.name} is {self.age} years old. They identify as {self.gender}, and are {self.orientation}'   
 
 test = Settlement()
 
